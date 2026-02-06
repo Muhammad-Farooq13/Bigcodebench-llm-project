@@ -1,0 +1,57 @@
+# Auto detect text files and normalize line endings to LF
+* text=auto
+
+# Python
+*.py text eol=lf
+*.pyx text eol=lf
+*.pyi text eol=lf
+*.txt text eol=lf
+*.cfg text eol=lf
+*.ini text eol=lf
+*.toml text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+
+# Shell scripts
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Jupyter Notebooks
+*.ipynb text merge=union
+
+# Docker
+Dockerfile text eol=lf
+*.dockerignore text eol=lf
+
+# Documentation
+*.md text eol=lf
+*.rst text eol=lf
+LICENSE text eol=lf
+CHANGELOG.md text eol=lf
+
+# Binary files
+*.pkl binary
+*.pickle binary
+*.pth binary
+*.pt binary
+*.onnx binary
+*.h5 binary
+*.hdf5 binary
+*.parquet binary
+*.zip binary
+*.tar binary
+*.gz binary
+
+# Images
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg text diff=image
+
+# Video
+*.mp4 binary
+*.mov binary
+*.mkv binary
