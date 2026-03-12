@@ -4,9 +4,15 @@ Data loading utilities for BigCodeBench dataset
 
 import logging
 from typing import Dict, Optional, Union
-from datasets import load_dataset, DatasetDict, Dataset
 from pathlib import Path
 import os
+
+try:
+    from datasets import load_dataset, DatasetDict, Dataset
+except ImportError:  # pragma: no cover
+    load_dataset = None  # type: ignore
+    DatasetDict = None  # type: ignore
+    Dataset = None  # type: ignore
 
 logger = logging.getLogger(__name__)
 

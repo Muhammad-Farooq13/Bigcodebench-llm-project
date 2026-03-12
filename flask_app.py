@@ -57,8 +57,11 @@ def load_model_and_tokenizer():
 def initialize():
     """Initialize model on first request."""
     global MODEL
-    if MODEL is None:
-        load_model_and_tokenizer()
+    if MODEL is None and not app.config.get('TESTING', False):
+        try:
+            load_model_and_tokenizer()
+        except Exception as e:
+            logger.warning(f"Could not load model: {e}")
 
 
 @app.route('/health', methods=['GET'])
@@ -84,7 +87,7 @@ def predict():
     }
     """
     try:
-        data = request.get_json()
+        data = request.get_json(silent=True)
         
         if not data:
             return jsonify({'error': 'No JSON data provided'}), 400

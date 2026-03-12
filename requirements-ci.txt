@@ -1,34 +1,28 @@
-# CI-safe requirements for Bigcodebench-llm-project
-# torch, transformers, tokenizers, datasets, evaluate, rouge-score, bert-score
-# are excluded from CI (GPU/large packages, 5+ GB combined).
-# They are still in requirements.txt for local/GPU development.
-numpy==1.24.3
-pandas==2.0.3
-scikit-learn==1.3.0
-scipy==1.11.1
+# CI dependencies for Bigcodebench-llm-project
+# torch, transformers, datasets, tokenizers, evaluate, rouge-score, bert-score
+# are excluded (GPU/large packages, 5+ GB combined).
+numpy
+pandas
+scikit-learn
+scipy
 
-# Web Framework & Deployment
-flask==2.3.2
-flask-cors==4.0.0
-python-dotenv==1.0.0
-gunicorn==21.2.0
-
-# ML Workflow & Experimentation
-mlflow==2.7.0
-pydantic==2.2.0
+# Flask
+flask
+flask-cors
+python-dotenv
 
 # Monitoring & Logging
-python-json-logger==2.0.7
+python-json-logger
 
-# Testing & Code Quality
-pytest==7.4.0
-pytest-cov==4.1.0
-black==23.7.0
-flake8==6.0.0
-isort==5.12.0
+# Testing
+pytest
+pytest-cov
+
+# Linting
+flake8
 
 # Utilities
-tqdm==4.65.0
-requests==2.31.0
-pyyaml==6.0.1
-click==8.1.7
+tqdm
+requests
+pyyaml
+click

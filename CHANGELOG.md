@@ -1,70 +1,29 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project are documented in this file.
+Format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-## [1.0.0] - 2026-02-06
+## [1.0.0] - 2026-03-12
 
 ### Added
-- Initial release of BigCodeBench LLM Project
-- Complete data loading pipeline for BigCodeBench dataset
-- Code preprocessing and tokenization utilities
-- Support for multiple transformer models (CodeBERT, GraphCodeBERT, CodeT5)
-- Model training and evaluation framework
-- Feature engineering module for code and text features
-- Visualization utilities for data exploration and results
-- Flask REST API with 6 endpoints
-- Docker containerization with multi-stage builds
-- Docker Compose orchestration with Redis and MLflow
-- MLOps pipeline with MLflow experiment tracking
-- Comprehensive test suite with pytest
-- GitHub Actions CI/CD workflows
-- Configuration management system
-- Structured logging with multiple handlers
-- Jupyter notebooks for interactive exploration
-  - 01_data_exploration.ipynb
-  - 02_preprocessing.ipynb
-  - 03_model_training.ipynb
-  - 04_evaluation.ipynb
-- Complete documentation
-  - README.md with setup and usage instructions
-  - QUICKSTART.md for quick start guide
-  - PROJECT_SUMMARY.md with component details
-  - INSTALLATION_GUIDE.md with step-by-step setup
-  - CONTRIBUTING.md with contribution guidelines
-  - COMPLETION_CHECKLIST.md with features checklist
-- License (MIT)
-- Contributing guidelines
-- Issue templates (bug report, feature request, documentation)
-- Pull request template
-- Comprehensive .gitignore
-- Requirements file with all dependencies
+- `src/models/evaluator.py`: `ModelEvaluator` (classification + regression metrics) and `MetricsComputer` (code similarity via SequenceMatcher) - previously missing, causing import failures
+- `src/models/__init__.py`: models sub-package exporting both classes
+- `train_demo.py`: lightweight TF-IDF + RandomForestClassifier demo - no GPU or model download required
+- `models/bigcode_demo.pkl`: trained demo model bundle (tfidf + scaler + RF + metrics)
+- `streamlit_app.py`: four-tab interactive dashboard (Code Quality Predictor, Model Dashboard, Code Explorer, LLM Pipeline)
+- `.streamlit/config.toml`: dark-theme Streamlit configuration
+- `runtime.txt` / `packages.txt` for Streamlit Cloud deployment
 
 ### Fixed
-- GitHub Actions workflows configuration
-- Import warning handling documentation
-- Pickle file support implementation
+- `src/data/loader.py`: wrapped top-level `from datasets import ...` in `try/except ImportError` so the module loads in CI environments where `datasets` is not installed
+- `flask_app.py` `before_request`: skips automatic model loading when `app.config['TESTING']` is True, allowing all Flask tests to run without downloading CodeBERT
+- `flask_app.py` `/api/predict`: changed `request.get_json()` to `request.get_json(silent=True)` so requests with no Content-Type header return 400 instead of 500
+- All 3 test files now collect and run successfully (previously 2 collection errors blocked the entire suite)
 
-## Future Releases
-
-### Planned for v1.1.0
-- [ ] Advanced hyperparameter tuning interface
-- [ ] Model comparison dashboard
-- [ ] Extended code metrics
-- [ ] Kubernetes deployment configs
-- [ ] GraphQL API endpoint
-- [ ] Web UI for model management
-- [ ] Distributed training support
-
-### Planned for v1.2.0
-- [ ] Fine-tuning on custom datasets
-- [ ] Model quantization and optimization
-- [ ] Mobile deployment support
-- [ ] Enhanced monitoring and alerting
-- [ ] Multi-language support in UI
-
----
-
-For more information, see [README.md](README.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
+### Changed
+- CI upgraded: `actions/checkout@v4`, `actions/setup-python@v5` (built-in pip cache), `codecov/codecov-action@v5`
+- Python matrix updated from `3.9/3.10/3.11` to `3.10/3.11/3.12`
+- Removed redundant `actions/cache@v3` step (replaced by `setup-python@v5` cache option)
+- `requirements.txt` replaced with Streamlit Cloud runtime only (numpy, pandas, scikit-learn, streamlit, plotly)
+- `requirements-ci.txt` unpinned and trimmed to only packages needed for the test + lint suite
+- `.gitignore` created from scratch with `models/*.pkl` exclusion and `!models/bigcode_demo.pkl` exception
